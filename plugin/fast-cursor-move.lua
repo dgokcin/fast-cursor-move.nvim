@@ -1,6 +1,7 @@
 local fn = vim.fn
 local api = vim.api
 
+local ENABLE_ACCELERATION = false
 local ACCELERATION_LIMIT = 150
 local ACCELERATION_TABLE_VERTICAL = { 7, 14, 20, 26, 31, 36, 40 }
 local ACCELERATION_TABLE_HORIZONTAL = { 10, 15, 20 }
@@ -34,6 +35,10 @@ local get_move_step = (function()
 	local prev_time = 0
 	local move_count = 0
 	return function(direction)
+		if not ENABLE_ACCELERATION then
+			return 1
+		end
+		
 		if direction ~= prev_direction then
 			prev_time = 0
 			move_count = 0
