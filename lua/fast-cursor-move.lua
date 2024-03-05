@@ -1,3 +1,5 @@
+local M = {}
+
 local fn = vim.fn
 local api = vim.api
 
@@ -38,7 +40,7 @@ local get_move_step = (function()
 		if not ENABLE_ACCELERATION then
 			return 1
 		end
-		
+
 		if direction ~= prev_direction then
 			prev_time = 0
 			move_count = 0
@@ -105,12 +107,13 @@ local function move(direction)
 	end
 end
 
-local function setup()
-	for _, motion in ipairs({ "h", "j", "k", "l" }) do
-		vim.keymap.set({ "n", "v" }, motion, function()
-			return move(motion)
-		end, { expr = true })
-	end
+function M.setup(config)
+    ENABLE_ACCELERATION = config.enable_acceleration or false
+    for _, motion in ipairs({ "h", "j", "k", "l" }) do
+        vim.keymap.set({ "n", "v" }, motion, function()
+            return move(motion)
+        end, { expr = true })
+    end
 end
 
-vim.defer_fn(setup, 500)
+return M
